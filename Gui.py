@@ -5,7 +5,7 @@ import Model
 
 def main(page: ft.Page):
     page.window_width = 1000       
-    page.window_height = 500
+    page.window_height = 525
     page.padding=15
 
     def btn_click(e):
@@ -36,9 +36,9 @@ def main(page: ft.Page):
                 )
             )
                 
-    def btn_clickAnyToDec(e):
+    def btn_clickDecToAny(e):
         if not txt_number.value:
-            page.route="/Binary"
+            page.route="/DecToAny"
             txt_number.error_text = "Please enter a number "
             page.update()
         else: 
@@ -65,13 +65,13 @@ def main(page: ft.Page):
                 txt_Index,
                 ft.Row(
                     [
-                    ft.ElevatedButton("Get the result", on_click=btn_clickAnyToDecRes),
+                    ft.ElevatedButton("Get the result", on_click=btn_clickDecToAnyRes),
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 )
             )
                 
-    def btn_clickAnyToDecRes(e):
+    def btn_clickDecToAnyRes(e):
         if not txt_Index.value:
             txt_Index.error_text = "Please enter a number "
             page.update()
@@ -83,21 +83,18 @@ def main(page: ft.Page):
             if check == False:
                 txt_number.error_text = "Please enter a valid number"
                 page.update()
-            elif number == 0 :
-                txt_number.error_text = "Please enter a valid number"
-                page.update()
             else:
-                if number == 0 :
-                    txt_number.error_text = "Please enter a valid number"
+                if  Model.decimalToAny(int(number),int(Index)) == False:
+                    txt_number.error_text = "Please enter a valid System"
                     page.clean()
                     page.update()
                 else:
-                    res = Model.anyBaseTodecimal(int(number),int(Index))
-
+                    res = Model.decimalToAny(int(number),int(Index))
+                    page.clean()
                     page.add(ft.Container(
                         ft.Row(
                             [
-                                ft.Text(f"The convertion from {Index} To Decimal is {res}),!",size=35,bgcolor=black),
+                                ft.Text(f"The convertion from {number} Decimal to base {Index} is {res}!",size=35,bgcolor=black),
                             ],
                             alignment=ft.MainAxisAlignment.CENTER
                         ),
@@ -347,6 +344,69 @@ def main(page: ft.Page):
                     alignment=ft.MainAxisAlignment.CENTER,
                 )
             )
+    def btn_clickMcmIndex(e):
+        if not txt_number.value:
+            txt_number.error_text = "Please enter a number "
+            page.update()
+        else: 
+            number = txt_number.value
+            page.route = "/DivisorsIndex"
+            check = Model.isNumber(number)
+            if check == False:
+                txt_number.error_text = "Please enter a valid number"
+                page.update()
+            else:
+                page.clean()
+                page.add(ft.Container(ft.Row(
+                [
+                    ft.Text(f"Chose the second number of the MCD",size=25,bgcolor=black),
+                
+                ],
+                alignment=ft.MainAxisAlignment.CENTER,
+                ),
+                alignment=ft.alignment.center_right,
+                width=800,
+                height=150,
+                bgcolor= "#a6d5d0",
+                border_radius=100,
+            ),
+                txt_Index,
+                ft.Row(
+                    [
+                     ft.ElevatedButton("Get the result", on_click=btn_clickMcmIndex2),
+                    ],
+                    alignment=ft.MainAxisAlignment.CENTER,
+                )
+            )
+                
+    def btn_clickMcmIndex2(e):
+        if not txt_Index.value:
+            txt_Index.error_text = "Please enter a number "
+            page.update()
+        else: 
+            Index = txt_Index.value
+            page.route = "/DivisorsIndex2"
+            number = txt_number.value
+            check = Model.isNumber(Index)
+            if check == False:
+                txt_number.error_text = "Please enter a valid number"
+                page.update()
+            else:
+                page.clean()
+                page.add(ft.Container(
+                    ft.Row(
+                        [
+                            ft.Text(f"The Maximum Divisor in common between {number} and {Index} is {Model.mcm(int(number),int(Index))}",size=35,bgcolor=black),
+                        ],
+                        alignment=ft.MainAxisAlignment.CENTER
+                    ),
+                alignment=ft.alignment.center_right,
+                width=1000,
+                height=250,
+                bgcolor= "#522e31",
+                border_radius=100
+                )
+            )
         
     txt_number = ft.TextField(label="Your number",bgcolor="#02075d" ,border_color = ft.colors.TRANSPARENT,color=ft.colors.WHITE,)
     txt_Index = ft.TextField(label="Index")
@@ -394,9 +454,10 @@ def main(page: ft.Page):
         ft.Container(
             ft.Row(
                 [
-                    ft.ElevatedButton("Convert a number to any base", on_click=btn_clickAnyToDec),
+                    ft.ElevatedButton("Convert a number to any base", on_click=btn_clickDecToAny),
                     ft.ElevatedButton("Is Prime", on_click=btn_clickIsPrime),
                     ft.ElevatedButton("MCD", on_click=btn_clickMcdIndex),
+                    ft.ElevatedButton("MCM", on_click=btn_clickMcmIndex),
                 ],
                 alignment=ft.MainAxisAlignment.CENTER,
             ),
@@ -405,6 +466,23 @@ def main(page: ft.Page):
             height=100,
             alignment=ft.alignment.center_right,
             border_radius= 50,
+        )
+    )
+    page.add(
+        ft.Container(
+            ft.Column(
+                [
+                   ft.Text(f"Juan felipe de la hoz: UI desing and leader",color="#72c7d3",text_align=ft.alignment.center,size=15),
+                   ft.Text(f"Kevin Andrés Galvis Urrego: Backend developer",color="#72c7d3",text_align=ft.alignment.center,size=15),
+                   ft.Text(f"Juan Camilo: Backend Revision and correction ",color="#72c7d3",text_align=ft.alignment.center,size=15),
+                ],
+                alignment= ft.MainAxisAlignment.CENTER,
+            ),
+            bgcolor=black,
+            width=300,
+            height=160,
+            alignment=ft.alignment.center_left,
+            border_radius=10,
         )
     )
     returnbt

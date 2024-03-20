@@ -58,11 +58,31 @@ def isNumber(number:object):
     except:
         return False
     
-def anyBaseTodecimal(number: int, sistem:int):
-    while number>=sistem:
-        pass
+def decimalToAny(numero, base):
+    if base < 2 or base > 16:
+        return False
+
+    resultado = ""
+    while numero > 0:
+        digit = numero % base
+        # Convertir el dígito a letra si es necesario
+        if digit >= 10:
+            digit = numero_a_letra(digit)
+        resultado = str(digit) + resultado
+        numero //= base
+
+    return resultado
 
 def mcd(a, b):
     while b != 0:
         a, b = b, a % b
     return a
+
+def mcm(a, b):
+    while b:
+        a, b = b, a % b
+    return a
+
+def numero_a_letra(numero):
+    conversion = {10: 'a', 11: 'b', 12: 'c', 13: 'd', 14: 'e', 15: 'f', 16: 'g'}
+    return conversion.get(numero, '')
